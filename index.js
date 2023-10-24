@@ -2,6 +2,10 @@ const express = require('express');
 const { faker } = require('@faker-js/faker');
 const Joi = require('joi');
 
+const Product = require('./product.model');
+const connect = require('./connect');
+connect();
+
 const app = express();
 
 app.use(express.json());
@@ -48,6 +52,31 @@ app.get('/products/:id', (req, res) => {
 });
 
 // PUT /products/id ???
+
+app.post('/products', async (req, res) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    price: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+  const { error } = schema.validate(req.body);
+
+  if (error) {
+    return res.status(400).send({
+      ok: false,
+      msg: error.details[0].message,
+    });
+  }
+
+  const product = new Product(req.body);
+
+  try {
+    await product.save();
+    res.status(201).send({ ok: true, msg: product });
+  } catch (err) {
+    res.status(500).send({ ok: false, msg: 'Internal server error' });
+  }
+});
 
 app.put('/products/:id', (req, res) => {
   const schema = Joi.object({
