@@ -1,9 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const { faker } = require('@faker-js/faker');
 const Joi = require('joi');
 
 const Product = require('./product.model');
 const connect = require('./connect');
+
 connect();
 
 const app = express();
@@ -29,8 +31,6 @@ for (let i = 0; i < 7; i++) {
     description: faker.commerce.productDescription(),
   };
 }
-
-console.log(products);
 
 app.get('/products', (req, res) => {
   res.send(products);

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-
-const MONGODB_URL = 'mongodb+srv://ndjerrou:ndjerrou@db.tounu.mongodb.net/api';
+const MONGODB_URL = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@db.tounu.mongodb.net/api`;
 
 module.exports = async () => {
   try {
