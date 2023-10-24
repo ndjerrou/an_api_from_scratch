@@ -77,10 +77,14 @@ app.put('/products/:id', (req, res) => {
       msg: 'Product was not found with the given id',
     });
 
-  product = {
-    ...product,
-    ...req.body,
-  };
+  //   product = {
+  //     ...product,
+  //     ...req.body,
+  //   };
+
+  for (let key in req.body) {
+    product[key] = req.body[key];
+  }
 
   res.status(200).send({ ok: true, data: product });
 });
