@@ -1,7 +1,10 @@
 const express = require('express');
 const { faker } = require('@faker-js/faker');
+const Joi = require('joi');
 
 const app = express();
+
+app.use(express.json());
 
 // CRUD - [GET, POST, PUT, DELETE]
 
@@ -44,12 +47,42 @@ app.get('/products/:id', (req, res) => {
   });
 });
 
-app.get('', (req, res) => {
-  res.send('Welcome , homepage');
-});
+// PUT /products/id ???
 
-// app.get('*', (req, res) => {
-//   res.send("je traite n'importe quelle page");
-// });
+app.put('/products/:id', (req, res) => {
+  const schema = Joi.object({
+    name: Joi.string(),
+    price: Joi.string(),
+    description: Joi.string(),
+  });
+
+  const { error } = schema.validate(req.body);
+
+  if (error) {
+    return res.status(400).send({
+      ok: false,
+      msg: error.details[0].message,
+    });
+  }
+
+  const { id } = req.params;
+
+  let product = products.find(product => product.id === id);
+
+  console.log(req.body);
+
+  if (!product)
+    return res.status(404).send({
+      ok: false,
+      msg: 'Product was not found with the given id',
+    });
+
+  product = {
+    ...product,
+    ...req.body,
+  };
+
+  res.status(200).send({ ok: true, data: product });
+});
 
 app.listen(8000, () => console.log('Listenning on port 8000'));

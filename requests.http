@@ -1,0 +1,8 @@
+PUT http://localhost:8000/products/daf19288-b372-4ad3-84f1-f65c23a062e4
+
+Content-Type: "application/json"
+
+{
+    "name": "Iphone 14",
+    "price": 200
+}
